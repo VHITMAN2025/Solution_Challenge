@@ -1,0 +1,8 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /employees/{employeeId} {
+      allow read: if true; // Allow read access to the employees collection
+      // You can add more specific rules here
+    }
+  }
+}

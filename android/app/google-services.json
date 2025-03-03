@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "638840154211",
+    "project_id": "voteshield-4eee1",
+    "storage_bucket": "voteshield-4eee1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638840154211:android:acf0de9297f2fe41c13056",
+        "android_client_info": {
+          "package_name": "com.example.voteshield"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARybPqbkH0E_n-ZbdGlccrB1li7UmPDCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
