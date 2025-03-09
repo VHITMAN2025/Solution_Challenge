@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'document_scanner_page.dart';
+import 'details.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -27,6 +28,18 @@ class WelcomePage extends StatelessWidget {
                 );
               },
               child: const Text('Scan Document'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                );
+              },
+              child: const Text('Go to Details'),
             ),
           ],
         ),
