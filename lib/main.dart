@@ -98,15 +98,15 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16.0),
             ElevatedButton(onPressed: _login, child: const Text('Login')),
             const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-              child: const Text('Go to Details'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => ProfilePage()),
+            //     );
+            //   },
+            //   child: const Text('Go to Details'),
+            // ),
           ],
         ),
       ),
