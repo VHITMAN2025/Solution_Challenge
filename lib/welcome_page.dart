@@ -1,22 +1,8 @@
 import 'package:flutter/material.dart';
-// Add the following import for the scanner functionality
-import 'package:barcode_scan2/barcode_scan2.dart';
+import 'document_scanner_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
-
-  Future<void> _openScanner(BuildContext context) async {
-    try {
-      var result = await BarcodeScanner.scan();
-      if (result.rawContent.isNotEmpty) {
-        // Handle the scanned data
-        print(result.rawContent);
-      }
-    } catch (e) {
-      // Handle any errors
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +11,22 @@ class WelcomePage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             const Text(
-              'Welcome to VoteShield!',
+              'Scan the Voter ID Card',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'You have successfully logged in.',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _openScanner(context),
-              child: const Text('Scan Code'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DocumentScannerPage(),
+                  ),
+                );
+              },
+              child: const Text('Scan Document'),
             ),
           ],
         ),
