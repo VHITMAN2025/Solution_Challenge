@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'document_scanner_page.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -54,11 +52,6 @@ class _WelcomePageState extends State<WelcomePage> {
               },
               child: const Text('Scan Document'),
             ),
-            if (_imagefile != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text('File Path: ${_imagefile!.path}'),
-              ),
           ],
         ),
       ),
