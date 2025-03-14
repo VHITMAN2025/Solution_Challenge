@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'document_scanner_page.dart';
-import 'details.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:voteshield/details.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:path_provider/path_provider.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -47,14 +45,19 @@ class _WelcomePageState extends State<WelcomePage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  getImage();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DocumentScannerPage(),
+                    ),
+                  );
                 },
                 child: const Text('Go to Details'),
               ),
               const SizedBox(height: 20), // Added some spacing
               ElevatedButton(
                 onPressed: () {
-                  getImage();
+                  print("Hello HITMAN");
                 },
                 child: const Text('Pick Image from Camera'),
               ),
@@ -83,40 +86,40 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  void getImage() async {
-    try {
-      final pickedImage = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-      );
-      if (pickedImage != null) {
-        textScan = true;
-        Imagefile = pickedImage;
-        setState(() {});
-        getRecognisedText(pickedImage);
-      }
-    } catch (e) {
-      setState(() {
-        textScan = false;
-        Imagefile = null;
-        scannedText = "Error occured while fetching";
-      });
-    }
-  }
+  // void getImage() async {
+  //   try {
+  //     final pickedImage = await ImagePicker().pickImage(
+  //       source: ImageSource.camera,
+  //     );
+  //     if (pickedImage != null) {
+  //       textScan = true;
+  //       Imagefile = pickedImage;
+  //       setState(() {});
+  //       getRecognisedText(pickedImage);
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       textScan = false;
+  //       Imagefile = null;
+  //       scannedText = "Error occured while fetching";
+  //     });
+  //   }
+  // }
 
-  void getRecognisedText(XFile image) async {
-    final inputImage = InputImage.fromFilePath(image.path);
-    final textrecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-    final RecognizedText recognizedText = await textrecognizer.processImage(
-      inputImage,
-    );
-    await textrecognizer.close();
-    scannedText = "";
-    for (TextBlock block in recognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        scannedText = scannedText + line.text + "\n";
-      }
-    }
-    textScan = false;
-    setState(() {});
-  }
+  // void getRecognisedText(XFile image) async {
+  //   final inputImage = InputImage.fromFilePath(image.path);
+  //   final textrecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+  //   final RecognizedText recognizedText = await textrecognizer.processImage(
+  //     inputImage,
+  //   );
+  //   await textrecognizer.close();
+  //   scannedText = "";
+  //   for (TextBlock block in recognizedText.blocks) {
+  //     for (TextLine line in block.lines) {
+  //       scannedText = scannedText + line.text + "\n";
+  //     }
+  //   }
+  //   textScan = false;
+  //   setState(() {});
+  // }
 }
