@@ -7,9 +7,9 @@ plugins {
 }
 
 android {
-    ndkVersion = flutter.ndkVersion
     namespace = "com.example.voteshield"
     compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -21,7 +21,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.voteshield"
         // You can update the following values to match your application needs.
