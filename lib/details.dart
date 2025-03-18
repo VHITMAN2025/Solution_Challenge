@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(MaterialApp(
-//     debugShowCheckedModeBanner: false, // Disable debug banner
-//     home: ProfilePage(), // Set ProfilePage as the home screen
-//   ));
-// }
-
 class ProfilePage extends StatelessWidget {
-  Widget textfield({@required String? hintText}) {
-    return Material(
-      elevation: 4,
-      shadowColor: const Color.fromARGB(255, 143, 137, 137),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(
-            letterSpacing: 2,
-            color: Colors.black54,
-            fontWeight: FontWeight.bold,
+  final String? voterId;
+  final String? voterName;
+  final int? voterPart;
+  final String? voterAddress;
+
+  ProfilePage({
+    Key? key,
+    this.voterId,
+    this.voterName,
+    this.voterPart,
+    this.voterAddress,
+  }) : super(key: key);
+
+  Widget detailRow({required String title, required String? value}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black54,
+            ),
           ),
-          fillColor: Colors.white30,
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide.none,
+          Text(
+            value ?? 'N/A', // Display 'N/A' if value is null
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.black87,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -41,11 +47,10 @@ class ProfilePage extends StatelessWidget {
         elevation: 0.0,
         backgroundColor: Color(0xff555555),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back to the previous page
+          },
         ),
       ),
       body: Stack(
@@ -61,32 +66,13 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    textfield(hintText: 'Username'),
-                    textfield(hintText: 'Email'),
-                    textfield(hintText: 'Password'),
-                    textfield(hintText: 'Confirm password'),
-                    Container(
-                      height: 55,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black54,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Update",
-                            style: TextStyle(
-                              fontSize: 23,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    detailRow(title: 'Voter ID', value: voterId),
+                    detailRow(title: 'Voter Name', value: voterName),
+                    detailRow(title: 'Part number', value: voterPart?.toString()),
+                    detailRow(title: 'Address', value: voterAddress),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           CustomPaint(
@@ -102,7 +88,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(20),
                 child: Text(
-                  "Profile",
+                  "Voter Details",
                   style: TextStyle(
                     fontSize: 35,
                     letterSpacing: 1.5,
@@ -111,34 +97,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 5),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage('images/profile.png'),
-                  ),
-                ),
-              ),
             ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 270, left: 184),
-            child: CircleAvatar(
-              backgroundColor: Colors.black54,
-              child: IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
-              ),
-            ),
           ),
         ],
       ),
@@ -150,11 +109,12 @@ class HeaderCurvedContainer extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xff555555);
-    Path path = Path()
-      ..relativeLineTo(0, 150)
-      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
-      ..relativeLineTo(0, -150)
-      ..close();
+    Path path =
+        Path()
+          ..relativeLineTo(0, 150)
+          ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
+          ..relativeLineTo(0, -150)
+          ..close();
     canvas.drawPath(path, paint);
   }
 
