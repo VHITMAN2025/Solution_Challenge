@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:voteshield/details.dart';
 import 'welcome_page.dart';
 
 void main() async {
@@ -96,6 +97,16 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(onPressed: _login, child: const Text('Login')),
+            const SizedBox(height: 16.0),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => ProfilePage()),
+            //     );
+            //   },
+            //   child: const Text('Go to Details'),
+            // ),
           ],
         ),
       ),

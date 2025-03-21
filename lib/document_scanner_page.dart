@@ -35,7 +35,7 @@ class _DocumentScannerPageState extends State<DocumentScannerPage> {
             // Write the Uint8List to the temporary file
             await file.writeAsBytes(value);
             debugPrint('document saved success: ${file.path}');
-            // TODO: Navigate to the page to display the scanned document using file.path
+            Navigator.pop(context, file.path); // Return the file path
           } else {
             debugPrint('Document save failed.');
             ScaffoldMessenger.of(context).showSnackBar(
