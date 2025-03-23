@@ -3,19 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Pollingbooths extends StatelessWidget {
+class PollingBooths extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Pollingbooths();
+    return Scaffold(
+      appBar: AppBar(title: Text('Polling Booths')),
+      body: PollingBoothsStateful(), // Use the stateful widget here
+    );
   }
 }
 
-class PollingBooths extends StatefulWidget {
+class PollingBoothsStateful extends StatefulWidget {
   @override
-  State<PollingBooths> createState() => _SearchListState();
+  State<PollingBoothsStateful> createState() => _SearchListState();
 }
 
-class _SearchListState extends State<PollingBooths> {
+class _SearchListState extends State<PollingBoothsStateful> {
   List _allResults = [];
   List _resultList = [];
 
@@ -80,6 +83,7 @@ class _SearchListState extends State<PollingBooths> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false, // Remove back button
         title: CupertinoSearchTextField(controller: _searchController),
       ),
       body: ListView.builder(

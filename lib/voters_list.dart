@@ -6,7 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class VotersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SearchList();
+    return Scaffold(
+      appBar: AppBar(title: Text('Voters List')),
+      body: SearchList(), // Use the stateful widget here
+    );
   }
 }
 
@@ -79,6 +82,7 @@ class _SearchListState extends State<SearchList> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false, // Remove back button
         title: CupertinoSearchTextField(controller: _searchController),
       ),
       body: SizedBox(

@@ -24,6 +24,8 @@ class _WelcomePageState extends State<WelcomePage> {
   String? voterName;
   int? voterPart;
   String? voterAddress;
+  String? voterAadhar;
+  String? voterPan;
 
   Future<void> pickImage() async {
     final pickedFile = await ImagePicker().pickImage(
@@ -51,53 +53,99 @@ class _WelcomePageState extends State<WelcomePage> {
     final RecognizedText recognizedText = await textRecognizer.processImage(
       inputImage,
     );
-    List<String?> extractedMatches =
-        RegExp(
-          r'\b[A-Z]{3}[0-9]{7}\b',
-        ).allMatches(recognizedText.text).map((e) => e.group(0)).toList();
 
-    String extractedText = extractedMatches.join(', ');
+    List<String?> extractedMatches;
+    String extractedText = '';
 
-    if (extractedText.isEmpty) {
+    if (RegExp(r'\b[A-Z]{3}[0-9]{7}\b').hasMatch(recognizedText.text)) {
+      extractedMatches =
+          RegExp(
+            r'\b[A-Z]{3}[0-9]{7}\b',
+          ).allMatches(recognizedText.text).map((e) => e.group(0)).toList();
+      extractedText = extractedMatches.join(', ');
+    } else if (RegExp(r'\b[0-9]{12}\b').hasMatch(recognizedText.text)) {
       extractedMatches =
           RegExp(
             r'\b[0-9]{12}\b',
           ).allMatches(recognizedText.text).map((e) => e.group(0)).toList();
       extractedText = extractedMatches.join(', ');
-    }
-
-    if (extractedText.isEmpty) {
+    } else if (RegExp(
+      r'\b[A-Z]{5}[0-9]{4}[A-Z]{1}\b',
+    ).hasMatch(recognizedText.text)) {
       extractedMatches =
           RegExp(
             r'\b[A-Z]{5}[0-9]{4}[A-Z]{1}\b',
           ).allMatches(recognizedText.text).map((e) => e.group(0)).toList();
       extractedText = extractedMatches.join(', ');
-    }
-
-    if (extractedText.isEmpty) {
-      extractedMatches = RegExp(r'\b[A-Z]{2}[0-9]{13}$\b')
-          .allMatches(recognizedText.text)
-          .map((e) => e.group(0))
-          .toList();
+    } else if (RegExp(r'\b[A-Z]{2}[0-9]{13}\b').hasMatch(recognizedText.text)) {
+      // Modified regex: removed '$'
+      extractedMatches =
+          RegExp(r'\b[A-Z]{2}[0-9]{13}\b') // Modified regex: removed '$'
+          .allMatches(recognizedText.text).map((e) => e.group(0)).toList();
       extractedText = extractedMatches.join(', ');
     }
 
     // Check if extractedText exists and is not empty before proceeding
     if (extractedText.isNotEmpty) {
       // Query Firestore to check if the voter ID exists
-      FirebaseFirestore.instance
-          .collection('electoral_roll')
-          .where('voter_epic_no', isEqualTo: extractedText)
-          .get()
-          .then((querySnapshot) {
-            if (querySnapshot.docs.isNotEmpty) {
-              // Voter ID exists in the database
-              print('Voter ID found in database!');
+      checkFirestore(extractedText, 'voter_epic_no');
+    } else {
+      print('No valid Voter ID found in image.');
+      setState(() {
+        voterId = null; // Set voterId to null when no ID is found
+        voterName = null;
+        voterPart = null;
+        voterAddress = null;
+        voterAadhar = null;
+        voterPan = null;
+      });
+    }
+  }
+
+  Future<void> checkFirestore(String extractedText, String fieldName) async {
+    FirebaseFirestore.instance
+        .collection('electoral_roll')
+        .where(fieldName, isEqualTo: extractedText)
+        .get()
+        .then((querySnapshot) {
+          if (querySnapshot.docs.isNotEmpty) {
+            // Voter ID exists in the database
+            print('Voter ID found in database!');
+
+            // Check if the voter has already voted
+            bool isVoted = querySnapshot.docs.first.get('is_voted') ?? false;
+
+            if (isVoted) {
+              // Voter has already voted, show a message
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Already Voted"),
+                    content: Text("This voter has already cast their vote."),
+                    actions: [
+                      TextButton(
+                        child: Text("OK"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              // Set voterId to voter_epic_no from Firestore
+              String voterEpicNo = querySnapshot.docs.first.get(
+                'voter_epic_no',
+              );
               setState(() {
-                voterId = extractedText;
+                voterId = voterEpicNo;
                 voterName = querySnapshot.docs.first.get('voter_name');
                 voterPart = querySnapshot.docs.first.get('part_no');
                 voterAddress = querySnapshot.docs.first.get('address');
+                voterAadhar = querySnapshot.docs.first.get('aadhar_no');
+                voterPan = querySnapshot.docs.first.get('pan_card');
               });
 
               // Navigate to the details page, passing voterId and voterName
@@ -110,11 +158,26 @@ class _WelcomePageState extends State<WelcomePage> {
                         voterName: voterName,
                         voterPart: voterPart,
                         voterAddress: voterAddress,
+                        voterAadhar: voterAadhar,
+                        voterPan: voterPan,
                       ),
                 ),
               );
+            }
+          } else {
+            // Voter ID does not exist in the database, try other fields
+            if (fieldName == 'voter_epic_no') {
+              checkFirestore(extractedText, 'aadhar_no');
+            } else if (fieldName == 'aadhar_no') {
+              checkFirestore(extractedText, 'pan_card'); // Corrected field name
+            } else if (fieldName == 'pan_card') {
+              // Corrected field name
+              checkFirestore(
+                extractedText,
+                'license_no',
+              ); // Corrected field name
             } else {
-              // Voter ID does not exist in the database
+              // All fields checked, voter ID not found
               print('Voter ID not found in database.');
               setState(() {
                 voterId = 'Voter ID not found';
@@ -123,25 +186,17 @@ class _WelcomePageState extends State<WelcomePage> {
                 voterAddress = null;
               });
             }
-          })
-          .catchError((error) {
-            print("Error querying Firestore: $error");
-            setState(() {
-              voterId = 'Error checking Voter ID';
-              voterName = null;
-              voterPart = null;
-              voterAddress = null;
-            });
+          }
+        })
+        .catchError((error) {
+          print("Error querying Firestore: $error");
+          setState(() {
+            voterId = 'Error checking Voter ID';
+            voterName = null;
+            voterPart = null;
+            voterAddress = null;
           });
-    } else {
-      print('No valid Voter ID found in image.');
-      setState(() {
-        voterId = 'No Voter ID found';
-        voterName = null;
-        voterPart = null;
-        voterAddress = null;
-      });
-    }
+        });
   }
 
   @override
@@ -213,9 +268,7 @@ class _WelcomePageState extends State<WelcomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
                 );
               },
               child: Text('Go to Details'),
