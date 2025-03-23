@@ -1,12 +1,17 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:voteshield/about_ui.dart';
 import 'details.dart';
 import 'dart:io'; // Import the dart:io library
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import firestore
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'search.dart';
+import 'document_scanner_page.dart'; // Import firestore
+import 'pollingbooth.dart';
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -117,43 +122,67 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Welcome')),
+      appBar: AppBar(title: const Text('VoteShield')),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: Colors.deepPurple),
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.search),//
+              title: Text('Voter Details'),
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.how_to_vote),
+              title: Text('Pollin Booth'),
+              onTap: () {
+                Navigator.push( 
+                  context,
+                MaterialPageRoute(builder: (context) => PollingBoothsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('About Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutUsUI()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               'Welcome to VoteShield',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
+            SizedBox(height: 20),
+            FloatingActionButton(
               onPressed: () {
                 pickImage();
               },
-              child: const Text('Scan Voter ID'),
+              backgroundColor: Colors.deepPurple,
+              child: Icon(Icons.camera_alt),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-              child: const Text('Go to Details'),
-            ),
-            if (voterId != null)
-              Text('Voter ID: $voterId', style: TextStyle(fontSize: 18)),
-            if (voterName != null)
-              Text('Voter Name: $voterName', style: TextStyle(fontSize: 18)),
-            if (voterPart != null)
-              Text(
-                'Part No: ${voterPart.toString()}',
-                style: TextStyle(fontSize: 18),
-              ),
-            if (voterAddress != null)
-              Text('Address: $voterAddress', style: TextStyle(fontSize: 18)),
           ],
         ),
       ),
