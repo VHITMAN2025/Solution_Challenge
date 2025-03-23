@@ -5,7 +5,7 @@ import 'package:flutter_document_scanner/flutter_document_scanner.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DocumentScannerPage extends StatefulWidget {
-  const DocumentScannerPage({Key? key}) : super(key: key);
+  const DocumentScannerPage({super.key});
 
   @override
   State<DocumentScannerPage> createState() => _DocumentScannerPageState();

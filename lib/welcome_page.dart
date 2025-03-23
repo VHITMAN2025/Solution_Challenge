@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:voteshield/about_ui.dart';
 import 'details.dart';
 import 'dart:io'; // Import the dart:io library
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import firestore
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'search.dart';
+import 'document_scanner_page.dart'; // Import firestore
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -117,43 +119,73 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Welcome')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      appBar: AppBar(title: const Text('VoteShield')),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: [
-            const Text(
-              'Welcome to VoteShield',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            DrawerHeader(
+              decoration: BoxDecoration(color: Colors.deepPurple),
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                pickImage();
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                setState(() {
+                  voterId = null;
+                  voterName = null;
+                  voterPart = null;
+                  voterAddress = null;
+                });
+                Navigator.pop(context);
               },
-              child: const Text('Scan Voter ID'),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Details'),
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ProfilePage()),
                 );
               },
-              child: const Text('Go to Details'),
             ),
-            if (voterId != null)
-              Text('Voter ID: $voterId', style: TextStyle(fontSize: 18)),
-            if (voterName != null)
-              Text('Voter Name: $voterName', style: TextStyle(fontSize: 18)),
-            if (voterPart != null)
-              Text(
-                'Part No: ${voterPart.toString()}',
-                style: TextStyle(fontSize: 18),
-              ),
-            if (voterAddress != null)
-              Text('Address: $voterAddress', style: TextStyle(fontSize: 18)),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('About Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutUsUI()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Welcome to VoteShield',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DocumentScannerPage()),
+                );
+              },
+              backgroundColor: Colors.deepPurple,
+              child: Icon(Icons.camera_alt),
+            ),
           ],
         ),
       ),
