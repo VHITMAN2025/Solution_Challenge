@@ -6,13 +6,13 @@ class ProfilePage extends StatelessWidget {
   final int? voterPart;
   final String? voterAddress;
 
-  ProfilePage({
-    Key? key,
+  const ProfilePage({
+    super.key,
     this.voterId,
     this.voterName,
     this.voterPart,
     this.voterAddress,
-  }) : super(key: key);
+  });
 
   Widget detailRow({required String title, required String? value}) {
     return Padding(
@@ -76,11 +76,12 @@ class ProfilePage extends StatelessWidget {
             ],
           ),
           CustomPaint(
+            painter: HeaderCurvedContainer(),
+            // ignore: sized_box_for_whitespace
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
             ),
-            painter: HeaderCurvedContainer(),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
