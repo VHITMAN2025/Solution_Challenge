@@ -82,15 +82,51 @@ class _SearchListState extends State<SearchList> {
         backgroundColor: Colors.white,
         title: CupertinoSearchTextField(controller: _searchController),
       ),
-      body: ListView.builder(
-        itemCount: _resultList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_resultList[index]['name']),
-            subtitle: Text(_resultList[index]['gender']),
-            trailing: Text(_resultList[index]['epic_no']),
-          );
-        },
+      body: SizedBox(
+        height: 600.0,
+        child: ListView.builder(
+          itemCount: _resultList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(
+                _resultList[index]['name'],
+                style: TextStyle(fontSize: 18.0), // Increase name font size
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Gender: ${_resultList[index]['gender']}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.blue, // Change gender font color
+                    ),
+                  ),
+                  Text(
+                    'Father: ${_resultList[index]['father_name:']}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.blue, // Change father's name font color
+                    ),
+                  ),
+                  Text(
+                    'Is_voted: ${_resultList[index]['is_voted']}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.blue, // Change is_voted font color
+                    ),
+                  ),
+                ],
+              ),
+              trailing: Text(
+                _resultList[index]['epic_no'],
+                style: TextStyle(
+                  fontSize: 16.0,
+                ), // Increase epic number font size
+              ),
+            );
+          },
+        ),
       ),
     );
   }
