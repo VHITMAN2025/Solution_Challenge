@@ -41,7 +41,6 @@ class _LoginPageState extends State<LoginPage> {
     String password = _passwordController.text;
 
     try {
-      // Check credentials in Firestore
       final QuerySnapshot result =
           await FirebaseFirestore.instance
               .collection('employees')
