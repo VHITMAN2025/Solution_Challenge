@@ -146,7 +146,7 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
             ListTile(
               leading: Icon(Icons.how_to_vote),
-              title: Text('Pollin Booth'),
+              title: Text('Polling Booths'),
               onTap: () {
                 Navigator.push( 
                   context,
