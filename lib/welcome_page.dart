@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'document_scanner_page.dart';
 import 'details.dart';
+import 'list.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -40,6 +41,18 @@ class WelcomePage extends StatelessWidget {
                 );
               },
               child: const Text('Go to Details'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  listUI(),
+                  ),
+                );
+              },
+              child: const Text('Go to List'),
             ),
           ],
         ),

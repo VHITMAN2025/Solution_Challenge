@@ -6,15 +6,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(listUI());
 }
 
-class MyApp extends StatefulWidget {
+class listUI extends StatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<listUI> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<listUI> {
   List _allResults = [];
   List _resultList = [];
 
@@ -93,8 +93,8 @@ class _MyAppState extends State<MyApp> {
           itemBuilder: (context, index) {
             return ListTile(
               title: Text(_resultList[index]['name']),
-              subtitle: Text(_resultList[index]['email']),
-              trailing: Text(_resultList[index]['mobile']),
+              subtitle: Text(_resultList[index]['gender']),
+              trailing: Text(_resultList[index]['epic_no']),
             );
           },
         ),
