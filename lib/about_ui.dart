@@ -39,10 +39,10 @@ class AboutUsUI extends StatelessWidget {
             const SizedBox(height: 10),
             Column(
               children: [
-                _buildTeamMember('Vijay Raj', 'Project Manager', 'assets/ravi.jpg'),
-                _buildTeamMember('Vennela', 'Lead Developer', 'assets/priya.jpg'),
-                _buildTeamMember('Prasunna', 'UI/UX Designer', 'assets/arjun.jpg'),
-                _buildTeamMember('Yoshitha', 'Data Analyst', 'assets/meera.jpg'),
+                _buildTeamMember('Vijay Raj', 'Project Lead', 'assets/ravi.jpg'),
+                _buildTeamMember('Vennela', 'Database Administrator', 'assets/priya.jpg'),
+                _buildTeamMember('Prasunna', 'Frontend Developer', 'assets/arjun.jpg'),
+                _buildTeamMember('Yoshitha', 'Frontend Developer', 'assets/meera.jpg'),
               ],
             ),
           ],
