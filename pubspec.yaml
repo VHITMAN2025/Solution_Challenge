@@ -5,17 +5,21 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ^3.7.0
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_document_scanner: ^1.1.2
   firebase_core: ^3.12.1
-  barcode_scan2: ^4.1.7
+  image_picker: ^1.1.2
   cupertino_icons: ^1.0.8
   firebase_ui_firestore: ^1.7.1
   cloud_firestore: ^5.6.5
-  qr_code_scanner: ^0.6.1 # Ensure this line is present
+  path_provider: ^2.1.5
+  google_mlkit_text_recognition: ^0.14.0
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.2
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +28,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+

@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Default configuration for the Solution Challenge app
+            "name": "Solution_Challenge",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart" // Explicitly specify main.dart as the entry point
+        },
+        {
+            // Profile mode configuration for Solution Challenge
+            "name": "Solution_Challenge (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "lib/main.dart" // Explicitly specify main.dart as the entry point
+        },
+        {
+            // Release mode configuration for Solution Challenge
+            "name": "Solution_Challenge (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "program": "lib/main.dart" // Explicitly specify main.dart as the entry point
+        }
+    ]
+}
