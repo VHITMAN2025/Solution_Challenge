@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
+class VotersList extends StatelessWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return SearchList();
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class SearchList extends StatefulWidget {
+  @override
+  State<SearchList> createState() => _SearchListState();
+}
+
+class _SearchListState extends State<SearchList> {
   List _allResults = [];
   List _resultList = [];
 
@@ -51,10 +52,11 @@ class _MyAppState extends State<MyApp> {
 
   _getClientStream() async {
     try {
-      var data = await FirebaseFirestore.instance
-          .collection('clientz')
-          .orderBy('name')
-          .get();
+      var data =
+          await FirebaseFirestore.instance
+              .collection('voters')
+              .orderBy('name')
+              .get();
 
       setState(() {
         _allResults = data.docs;
@@ -75,29 +77,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Authentication',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: CupertinoSearchTextField(controller: _searchController),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: CupertinoSearchTextField(
-            controller: _searchController,
-          ),
-        ),
-        body: ListView.builder(
-          itemCount: _resultList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(_resultList[index]['name']),
-              subtitle: Text(_resultList[index]['email']),
-              trailing: Text(_resultList[index]['mobile']),
-            );
-          },
-        ),
+      body: ListView.builder(
+        itemCount: _resultList.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_resultList[index]['name']),
+            subtitle: Text(_resultList[index]['gender']),
+            trailing: Text(_resultList[index]['epic_no']),
+          );
+        },
       ),
     );
   }

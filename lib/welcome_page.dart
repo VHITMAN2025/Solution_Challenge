@@ -7,9 +7,10 @@ import 'package:voteshield/about_ui.dart';
 import 'details.dart';
 import 'dart:io'; // Import the dart:io library
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'search.dart';
 import 'document_scanner_page.dart'; // Import firestore
-import 'pollingbooth.dart';
+import 'pollingbooths.dart';
+import 'voters_list.dart'; // Add this import
+
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
@@ -135,12 +136,12 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.search),//
-              title: Text('Voters List'),
-              onTap: (){
+              leading: Icon(Icons.search), //
+              title: Text('Voter Details'),
+              onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => VotersList()),
                 );
               },
             ),
@@ -148,9 +149,9 @@ class _WelcomePageState extends State<WelcomePage> {
               leading: Icon(Icons.how_to_vote),
               title: Text('Polling Booths'),
               onTap: () {
-                Navigator.push( 
+                Navigator.push(
                   context,
-                MaterialPageRoute(builder: (context) => PollingBoothsPage()),
+                  MaterialPageRoute(builder: (context) => PollingBooths()),
                 );
               },
             ),
