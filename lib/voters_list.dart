@@ -60,11 +60,10 @@ class _SearchListState extends State<SearchList> {
 
       setState(() {
         _allResults = data.docs;
-        searchResultList(); // Update the result list after fetching data
+        searchResultList();
       });
     } catch (e) {
       print("Error fetching data: $e");
-      // Handle error (e.g., show an error message)
     }
   }
 

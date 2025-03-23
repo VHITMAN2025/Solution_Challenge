@@ -58,6 +58,30 @@ class _WelcomePageState extends State<WelcomePage> {
 
     String extractedText = extractedMatches.join(', ');
 
+    if (extractedText.isEmpty) {
+      extractedMatches =
+          RegExp(
+            r'\b[0-9]{12}\b',
+          ).allMatches(recognizedText.text).map((e) => e.group(0)).toList();
+      extractedText = extractedMatches.join(', ');
+    }
+
+    if (extractedText.isEmpty) {
+      extractedMatches =
+          RegExp(
+            r'\b[A-Z]{5}[0-9]{4}[A-Z]{1}\b',
+          ).allMatches(recognizedText.text).map((e) => e.group(0)).toList();
+      extractedText = extractedMatches.join(', ');
+    }
+
+    if (extractedText.isEmpty) {
+      extractedMatches = RegExp(r'\b[A-Z]{2}[0-9]{13}$\b')
+          .allMatches(recognizedText.text)
+          .map((e) => e.group(0))
+          .toList();
+      extractedText = extractedMatches.join(', ');
+    }
+
     // Check if extractedText exists and is not empty before proceeding
     if (extractedText.isNotEmpty) {
       // Query Firestore to check if the voter ID exists
