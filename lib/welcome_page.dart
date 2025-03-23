@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +9,7 @@ import 'dart:io'; // Import the dart:io library
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'search.dart';
 import 'document_scanner_page.dart'; // Import firestore
+import 'pollingbooth.dart';
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
@@ -132,25 +135,22 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () {
-                setState(() {
-                  voterId = null;
-                  voterName = null;
-                  voterPart = null;
-                  voterAddress = null;
-                });
-                Navigator.pop(context);
+              leading: Icon(Icons.search),//
+              title: Text('Voter Details'),
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPage()),
+                );
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Details'),
+              leading: Icon(Icons.how_to_vote),
+              title: Text('Pollin Booth'),
               onTap: () {
-                Navigator.push(
+                Navigator.push( 
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(builder: (context) => PollingBoothsPage()),
                 );
               },
             ),
@@ -178,10 +178,7 @@ class _WelcomePageState extends State<WelcomePage> {
             SizedBox(height: 20),
             FloatingActionButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DocumentScannerPage()),
-                );
+                pickImage();
               },
               backgroundColor: Colors.deepPurple,
               child: Icon(Icons.camera_alt),
