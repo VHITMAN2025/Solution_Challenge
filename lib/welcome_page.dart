@@ -208,6 +208,18 @@ class _WelcomePageState extends State<WelcomePage> {
               backgroundColor: Colors.deepPurple,
               child: Icon(Icons.camera_alt),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                );
+              },
+              child: Text('Go to Details'),
+            ),
           ],
         ),
       ),

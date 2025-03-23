@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatelessWidget {
   final String? voterId;
@@ -101,6 +102,66 @@ class ProfilePage extends StatelessWidget {
             ],
           ),
         ],
+      ),
+      bottomSheet: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('electoral_roll')
+                    .where('voter_epic_no', isEqualTo: voterId)
+                    .get()
+                    .then((querySnapshot) {
+                  if (querySnapshot.docs.isNotEmpty) {
+                    // Get the document reference
+                    DocumentReference documentRef =
+                        querySnapshot.docs.first.reference;
+
+                    // Update the is_voted field to true
+                    documentRef.update({'is_voted': true}).then((_) {
+                      print('Successfully updated is_voted to true');
+                      // Show a success message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Ballot issued successfully!'),
+                        ),
+                      );
+                    }).catchError((error) {
+                      print('Error updating is_voted: $error');
+                      // Show an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to issue ballot.'),
+                        ),
+                      );
+                    });
+                  } else {
+                    print('Voter ID not found in database.');
+                    // Show an error message to the user
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Voter ID not found.'),
+                      ),
+                    );
+                  }
+                }).catchError((error) {
+                  print("Error querying Firestore: $error");
+                  // Show an error message to the user
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error issuing ballot.'),
+                    ),
+                  );
+                });
+              },
+              child: const Text('Issue Ballot'),
+            ),
+          ],
+        ),
       ),
     );
   }
