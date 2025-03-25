@@ -54,60 +54,20 @@ class ProfilePage extends StatelessWidget {
             Navigator.pop(context); // Navigate back to the previous page
           },
         ),
+        title: const Text(
+          "Voter Details",
+          style: TextStyle(
+            fontSize: 24,
+            letterSpacing: 1.5,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true, // Center the title
       ),
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                height: 450,
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    detailRow(title: 'Voter ID', value: voterId),
-                    detailRow(title: 'Voter Name', value: voterName),
-                    detailRow(
-                      title: 'Part number',
-                      value: voterPart?.toString(),
-                    ),
-                    detailRow(title: 'Address', value: voterAddress),
-                    detailRow(title: 'Aadhar no', value: voterAadhar),
-                    detailRow(title: 'Pan card', value: voterPan),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          CustomPaint(
-            painter: HeaderCurvedContainer(),
-            // ignore: sized_box_for_whitespace
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  "Voter Details",
-                  style: TextStyle(
-                    fontSize: 35,
-                    letterSpacing: 1.5,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // Wrap details and button in a Column
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
