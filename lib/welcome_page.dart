@@ -26,6 +26,7 @@ class _WelcomePageState extends State<WelcomePage> {
   String? voterAddress;
   String? voterAadhar;
   String? voterPan;
+  bool _isFetchingData = false; // Track data fetching state
 
   Future<void> pickImage() async {
     final pickedFile = await ImagePicker().pickImage(
@@ -87,6 +88,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
     // Check if extractedText exists and is not empty before proceeding
     if (extractedText.isNotEmpty) {
+      setState(() {
+        _isFetchingData = true; // Start loading
+      });
       // Query Firestore to check if the voter ID exists
       checkFirestore(extractedText, 'voter_epic_no');
     } else {
@@ -99,6 +103,24 @@ class _WelcomePageState extends State<WelcomePage> {
         voterAadhar = null;
         voterPan = null;
       });
+      // Show an alert dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("No Voter ID Found"),
+            content: Text("No valid Voter ID found in the image."),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -134,6 +156,9 @@ class _WelcomePageState extends State<WelcomePage> {
                   );
                 },
               );
+              setState(() {
+                _isFetchingData = false; // Stop loading
+              });
             } else {
               // Set voterId to voter_epic_no from Firestore
               String voterEpicNo = querySnapshot.docs.first.get(
@@ -162,7 +187,12 @@ class _WelcomePageState extends State<WelcomePage> {
                         voterPan: voterPan,
                       ),
                 ),
-              );
+              ).then((_) {
+                setState(() {
+                  _isFetchingData =
+                      false; // Stop loading after returning from details page
+                });
+              });
             }
           } else {
             // Voter ID does not exist in the database, try other fields
@@ -184,7 +214,26 @@ class _WelcomePageState extends State<WelcomePage> {
                 voterName = null;
                 voterPart = null;
                 voterAddress = null;
+                _isFetchingData = false; // Stop loading
               });
+              // Show an alert dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Voter ID Not Found"),
+                    content: Text("Voter ID not found in the database."),
+                    actions: [
+                      TextButton(
+                        child: Text("OK"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             }
           }
         })
@@ -195,6 +244,7 @@ class _WelcomePageState extends State<WelcomePage> {
             voterName = null;
             voterPart = null;
             voterAddress = null;
+            _isFetchingData = false; // Stop loading
           });
         });
   }
@@ -247,32 +297,55 @@ class _WelcomePageState extends State<WelcomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/Election_Commission_of_India_Logo.svg.png",
+            ), // Replace with your image path
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withAlpha((0.2 * 255).round()),
+              BlendMode.dstATop,
+            ),
+          ),
+        ),
+        child: Stack(
           children: [
-            Text(
-              'Welcome to VoteShield',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Welcome to VoteShield',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  FloatingActionButton(
+                    onPressed: () {
+                      pickImage();
+                    },
+                    backgroundColor: Colors.deepPurple,
+                    child: Icon(Icons.camera_alt),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()),
+                      );
+                    },
+                    child: Text('Go to Details'),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 20),
-            FloatingActionButton(
-              onPressed: () {
-                pickImage();
-              },
-              backgroundColor: Colors.deepPurple,
-              child: Icon(Icons.camera_alt),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-              child: Text('Go to Details'),
-            ),
+            if (_isFetchingData)
+              Container(
+                color: Colors.black54,
+                child: const Center(child: CircularProgressIndicator()),
+              ),
           ],
         ),
       ),

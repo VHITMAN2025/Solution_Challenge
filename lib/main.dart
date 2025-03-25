@@ -83,10 +83,15 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _employeeIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false; // Track loading state
 
   void _login() async {
     String employeeId = _employeeIdController.text;
     String password = _passwordController.text;
+
+    setState(() {
+      _isLoading = true; // Start loading
+    });
 
     try {
       final QuerySnapshot result =
@@ -110,6 +115,10 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    } finally {
+      setState(() {
+        _isLoading = false; // Stop loading
+      });
     }
   }
 
@@ -157,6 +166,10 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
         ).animate().fade(duration: 1000.ms),
+        if (_isLoading)
+          const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+          ),
       ],
     );
   }
