@@ -20,14 +20,23 @@ dependencies:
   google_mlkit_text_recognition: ^0.14.0
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.2
+  string_similarity: ^2.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
   assets:
     - assets/Election_Commission_of_India_Logo.svg.png
     - assets/voting.png
+    - assets/logo.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/Election_Commission_of_India_Logo.svg.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21

@@ -9,7 +9,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _isLoading = false; // Add a loading state
+  bool _isLoading = false;
+  bool _obscureText = true; // Track password visibility
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,26 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // ... your login form elements ...
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: const OutlineInputBorder(),
+                  suffix: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText; // Toggle visibility
+                      });
+                    },
+                  ),
+                ),
+                obscureText: _obscureText,
+              ),
+            ),
             ElevatedButton(
               onPressed: () async {
                 setState(() {
