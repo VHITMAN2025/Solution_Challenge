@@ -39,8 +39,10 @@ class _SearchListState extends State<SearchList> {
     var showResults = [];
     if (_searchController.text != "") {
       for (var clientSnapShot in _allResults) {
-        var name = clientSnapShot['name'].toString().toLowerCase();
-        if (name.contains(_searchController.text.toLowerCase())) {
+        var name = clientSnapShot['name']?.toString().toLowerCase() ?? '';
+        var epicNo = clientSnapShot['epic_no']?.toString().toLowerCase() ?? '';
+        String searchText = _searchController.text.toLowerCase();
+        if (name.contains(searchText) || epicNo.contains(searchText)) {
           showResults.add(clientSnapShot);
         }
       }
