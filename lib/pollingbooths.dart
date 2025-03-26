@@ -89,10 +89,19 @@ class _SearchListState extends State<PollingBoothsStateful> {
       body: ListView.builder(
         itemCount: _resultList.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_resultList[index]['officer_name']),
-            subtitle: Text(_resultList[index]['address']),
-            trailing: Text(_resultList[index]['booth_no']),
+          // Add alternating background colors
+          Color backgroundColor =
+              index % 2 == 0
+                  ? Colors.grey[200]! // Light grey for even indices
+                  : Colors.white; // White for odd indices
+
+          return Container(
+            color: backgroundColor,
+            child: ListTile(
+              title: Text(_resultList[index]['officer_name']),
+              subtitle: Text(_resultList[index]['address']),
+              trailing: Text(_resultList[index]['booth_no']),
+            ),
           );
         },
       ),

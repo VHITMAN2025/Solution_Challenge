@@ -44,6 +44,19 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (voterId == null ||
+        voterName == null ||
+        voterPart == null ||
+        voterAddress == null ||
+        voterAadhar == null ||
+        voterPan == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text("Error")),
+        body: Center(
+          child: Text("Failed to load voter details. Please try again."),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -126,6 +139,24 @@ class ProfilePage extends StatelessWidget {
                                 'Voter status updated successfully!',
                               ),
                             ),
+                          );
+                          // Show AlertDialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Success"),
+                                content: Text("Ballot issued successfully!"),
+                                actions: [
+                                  TextButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         } else {
                           print('Document not found for epic_no: $voterId');

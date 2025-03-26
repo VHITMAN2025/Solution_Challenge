@@ -30,3 +30,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/Election_Commission_of_India_Logo.svg.png
+    - assets/voting.png

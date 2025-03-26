@@ -84,6 +84,7 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _employeeIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false; // Track loading state
+  bool _passwordVisible = false; // Track password visibility
 
   void _login() async {
     String employeeId = _employeeIdController.text;
@@ -102,9 +103,14 @@ class _LoginFormState extends State<LoginForm> {
               .get();
 
       if (result.docs.isNotEmpty) {
+        // Extract part_no from the logged-in user's document
+        int employeePartNo = result.docs.first.get('part_no');
+
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const WelcomePage()),
+          MaterialPageRoute(
+            builder: (context) => WelcomePage(employeePartNo: employeePartNo),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -140,11 +146,24 @@ class _LoginFormState extends State<LoginForm> {
         const SizedBox(height: 15),
         TextField(
           controller: _passwordController,
-          obscureText: true,
+          obscureText: !_passwordVisible,
           decoration: InputDecoration(
             labelText: "Password",
             prefixIcon: Icon(Icons.lock, color: Colors.deepPurple),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            suffixIcon: IconButton(
+              icon: Icon(
+                // Based on passwordVisible state choose the icon
+                _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Colors.deepPurple,
+              ),
+              onPressed: () {
+                // Update the state i.e. toogle the state of passwordVisible variable
+                setState(() {
+                  _passwordVisible = !_passwordVisible;
+                });
+              },
+            ),
           ),
         ).animate().fade(duration: 900.ms),
         const SizedBox(height: 20),

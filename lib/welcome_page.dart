@@ -12,7 +12,8 @@ import 'pollingbooths.dart';
 import 'voters_list.dart'; // Add this import
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  const WelcomePage({super.key, this.employeePartNo});
+  final int? employeePartNo;
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -134,17 +135,85 @@ class _WelcomePageState extends State<WelcomePage> {
             // Voter ID exists in the database
             print('Voter ID found in database!');
 
-            // Check if the voter has already voted
-            bool isVoted = querySnapshot.docs.first.get('is_voted') ?? false;
+            // Check if the part number matches the employeePartNo
+            if (widget.employeePartNo != null && querySnapshot.docs.first['part_no'] is int && querySnapshot.docs.first['part_no'] == widget.employeePartNo) {
+              // Check if the voter has already voted
+              bool isVoted = querySnapshot.docs.first.get('is_voted') ?? false;
 
-            if (isVoted) {
-              // Voter has already voted, show a message
+              if (isVoted) {
+                // Voter has already voted, show a message
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Already Voted"),
+                      content: Text("This voter has already cast their vote."),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+                setState(() {
+                  _isFetchingData = false; // Stop loading
+                });
+              } else {
+                // Set voterId to voter_epic_no from Firestore
+                String voterEpicNo = querySnapshot.docs.first.get(
+                  'voter_epic_no',
+                );
+                setState(() {
+                  voterId = voterEpicNo;
+                  voterName = querySnapshot.docs.first.get('voter_name');
+                  voterPart = querySnapshot.docs.first.get('part_no');
+                  voterAddress = querySnapshot.docs.first.get('address');
+                  voterAadhar = querySnapshot.docs.first.get('aadhar_no');
+                  voterPan = querySnapshot.docs.first.get('pan_card');
+                });
+
+                // Navigate to the details page, passing voterId and voterName
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ProfilePage(
+                          voterId: voterId,
+                          voterName: voterName,
+                          voterPart: voterPart,
+                          voterAddress: voterAddress,
+                          voterAadhar: voterAadhar,
+                          voterPan: voterPan,
+                        ),
+                  ),
+                ).then((_) {
+                  setState(() {
+                    _isFetchingData =
+                        false; // Stop loading after returning from details page
+                  });
+                });
+              }
+            } else {
+              // Part number does not match
+              print('Part number does not match.');
+              setState(() {
+                voterId = 'Part number does not match';
+                voterName = null;
+                voterPart = null;
+                voterAddress = null;
+                _isFetchingData = false; // Stop loading
+              });
+              // Show an alert dialog
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text("Already Voted"),
-                    content: Text("This voter has already cast their vote."),
+                    title: Text("Part Number Mismatch"),
+                    content: Text("The voter's part number does not match."),
                     actions: [
                       TextButton(
                         child: Text("OK"),
@@ -156,43 +225,6 @@ class _WelcomePageState extends State<WelcomePage> {
                   );
                 },
               );
-              setState(() {
-                _isFetchingData = false; // Stop loading
-              });
-            } else {
-              // Set voterId to voter_epic_no from Firestore
-              String voterEpicNo = querySnapshot.docs.first.get(
-                'voter_epic_no',
-              );
-              setState(() {
-                voterId = voterEpicNo;
-                voterName = querySnapshot.docs.first.get('voter_name');
-                voterPart = querySnapshot.docs.first.get('part_no');
-                voterAddress = querySnapshot.docs.first.get('address');
-                voterAadhar = querySnapshot.docs.first.get('aadhar_no');
-                voterPan = querySnapshot.docs.first.get('pan_card');
-              });
-
-              // Navigate to the details page, passing voterId and voterName
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => ProfilePage(
-                        voterId: voterId,
-                        voterName: voterName,
-                        voterPart: voterPart,
-                        voterAddress: voterAddress,
-                        voterAadhar: voterAadhar,
-                        voterPan: voterPan,
-                      ),
-                ),
-              ).then((_) {
-                setState(() {
-                  _isFetchingData =
-                      false; // Stop loading after returning from details page
-                });
-              });
             }
           } else {
             // Voter ID does not exist in the database, try other fields
