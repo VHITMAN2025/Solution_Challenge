@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/rendering.dart';
 import 'package:voteshield/about_page.dart';
-import 'package:voteshield/welcome_page.dart';
+import 'package:voteshield/HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 

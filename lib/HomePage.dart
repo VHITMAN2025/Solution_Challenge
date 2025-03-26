@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:voteshield/about_ui.dart';
-import 'details.dart';
+import 'details_page.dart';
 import 'dart:io'; // Import the dart:io library
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'document_scanner_page.dart'; // Import firestore

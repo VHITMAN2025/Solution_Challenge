@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:voteshield/splash_screen.dart';
-import 'welcome_page.dart';
+import 'HomePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
