@@ -68,7 +68,8 @@ class _WelcomePageState extends State<WelcomePage> {
       extractedName = nameMatch.first.group(1) ?? '';
     }
     print(extractedName);
-
+    // We extracted the Father Name because of avoid the AI to
+    // Scan the Father name instead of Voter Name
     RegExp fathernamePattern = RegExp(
       r"Father's Name:\s*([A-Za-z]+\s[A-Za-z]+\s?[A-Za-z]*)",
     );
@@ -414,15 +415,6 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: Icon(Icons.camera_alt),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()),
-                      );
-                    },
-                    child: Text('Go to Details'),
-                  ),
                 ],
               ),
             ),
